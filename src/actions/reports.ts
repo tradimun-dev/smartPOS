@@ -35,11 +35,10 @@ export async function getSalesReport(startDate?: string, endDate?: string, page:
         .select(`
             id,
             total_amount,
-            payment_method,
             status,
             created_at,
             customer:customers(name),
-            user:users_public(email)
+            user:users(email)
         `, { count: 'exact' })
         .order('created_at', { ascending: false })
         .range(from, to);
