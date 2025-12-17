@@ -18,8 +18,9 @@ import { useState } from 'react';
 const menuItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'POS Kasir', href: '/dashboard/pos', icon: ShoppingCart },
+    { name: 'Produk', href: '/dashboard/products', icon: Package },
+    { name: 'Pelanggan', href: '/dashboard/customers', icon: Users },
     { name: 'Inventori', href: '/dashboard/inventory', icon: Package },
-    { name: 'Master Data', href: '/dashboard/products', icon: Users }, // Products & Customers combined or sub-menu
     { name: 'Laporan', href: '/dashboard/reports', icon: FileBarChart },
 ];
 
@@ -53,8 +54,8 @@ export default function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center px-4 py-3 transition-colors ${isActive
-                                    ? 'bg-green-50 text-green-700 border-r-4 border-green-700'
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                ? 'bg-green-50 text-green-700 border-r-4 border-green-700'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }`}
                             title={collapsed ? item.name : ''}
                         >
