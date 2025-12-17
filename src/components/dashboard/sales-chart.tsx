@@ -32,7 +32,10 @@ export default function SalesChart({ data }: { data: any[] }) {
                     <Tooltip
                         cursor={{ fill: '#f3f4f6' }}
                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                        formatter={(value: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(value)}
+                        formatter={(value: any) => [
+                            new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(value) || 0),
+                            'Penjualan'
+                        ]}
                     />
                     <Bar
                         dataKey="total_sales"
