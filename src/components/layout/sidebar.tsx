@@ -11,7 +11,8 @@ import {
     FileBarChart,
     LogOut,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Settings
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,6 +23,7 @@ const menuItems = [
     { name: 'Pelanggan', href: '/dashboard/customers', icon: Users },
     { name: 'Inventori', href: '/dashboard/inventory', icon: Package },
     { name: 'Laporan', href: '/dashboard/reports', icon: FileBarChart },
+    { name: 'Konfigurasi', href: '/dashboard/configuration', icon: Settings },
 ];
 
 export default function Sidebar() {

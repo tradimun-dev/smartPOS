@@ -23,7 +23,7 @@ export default async function InventoryPage({
 
     return (
         <div className="space-y-6">
-            <InventoryHeader products={products} />
+            <InventoryHeader products={products} inventory={inventory} />
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">

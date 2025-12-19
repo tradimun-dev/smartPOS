@@ -1,12 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Search, X } from 'lucide-react';
+import { Plus, Search, X, Upload } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AddProductForm from './add-product-form';
+import ImportProductModal from './import-product-modal';
+import ProductActions from './product-actions';
 
-export default function ProductHeader({ categories }: { categories: any[] }) {
+export default function ProductHeader({ categories, units, products = [] }: { categories: any[], units: any[], products?: any[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isImportModalOpen, setIsImportModalOpen] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -29,7 +32,7 @@ export default function ProductHeader({ categories }: { categories: any[] }) {
                     <p className="text-gray-500 text-sm">Kelola data SKU, harga, dan stok awal</p>
                 </div>
 
-                <div className="flex gap-2 w-full sm:w-auto">
+                <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-start sm:items-center">
                     <div className="relative flex-1 sm:w-64">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input
@@ -41,15 +44,35 @@ export default function ProductHeader({ categories }: { categories: any[] }) {
                         />
                     </div>
 
-                    <button
-                        onClick={() => setIsModalOpen(true)}
-                        className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800"
-                    >
-                        <Plus size={18} />
-                        <span className="hidden sm:inline">Tambah</span>
-                    </button>
+                    <div className="flex gap-2">
+                        <ProductActions products={products} />
+
+                        <button
+                            onClick={() => setIsImportModalOpen(true)}
+                            className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm"
+                            title="Import Excel"
+                        >
+                            <Upload size={18} />
+                        </button>
+
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="flex items-center gap-2 bg-green-700 text-white px-4 py-2 rounded-lg hover:bg-green-800"
+                        >
+                            <Plus size={18} />
+                            <span className="hidden sm:inline">Tambah</span>
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <ImportProductModal
+                isOpen={isImportModalOpen}
+                onClose={() => {
+                    setIsImportModalOpen(false);
+                    router.refresh();
+                }}
+            />
 
             {/* Basic Modal */}
             {isModalOpen && (
@@ -68,6 +91,7 @@ export default function ProductHeader({ categories }: { categories: any[] }) {
                         <div className="p-6">
                             <AddProductForm
                                 categories={categories}
+                                units={units}
                                 onSuccess={() => setIsModalOpen(false)}
                             />
                         </div>

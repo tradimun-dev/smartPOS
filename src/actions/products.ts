@@ -106,6 +106,63 @@ export async function createProduct(prevState: ProductFormState, formData: FormD
     return { message: 'Produk berhasil ditambahkan!', success: true };
 }
 
+export async function updateProduct(id: string, prevState: ProductFormState, formData: FormData): Promise<ProductFormState> {
+    const supabase = await createClient();
+
+    const rawData = {
+        sku: formData.get('sku') as string,
+        name: formData.get('name') as string,
+        barcode: formData.get('barcode') as string || null,
+        category_id: formData.get('category_id') as string,
+        unit: formData.get('unit') as string,
+        min_stock: Number(formData.get('min_stock')) || 0,
+    };
+
+    const prices = [
+        { type: 'retail', price: Number(formData.get('price_retail')) || 0 },
+        { type: 'apotek', price: Number(formData.get('price_apotek')) || 0 },
+        { type: 'distributor', price: Number(formData.get('price_distributor')) || 0 },
+    ];
+
+    // 1. Update Product
+    const { error } = await supabase
+        .from('products')
+        .update(rawData)
+        .eq('id', id);
+
+    if (error) {
+        console.error('Update Error:', error);
+        return { message: 'Gagal update produk.', success: false };
+    }
+
+    // 2. Update Prices (Upsert)
+    // First, delete old prices? Or upsert?
+    // Supabase upsert needs a unique key conflict.
+    // product_prices has composite PK (product_id, customer_type) usually.
+    // Let's assume upsert works if schema allows or delete/insert.
+    // safest for now without checking schema: delete all for this product and re-insert.
+
+    await supabase.from('product_prices').delete().eq('product_id', id);
+
+    const priceInserts = prices.map(p => ({
+        product_id: id,
+        customer_type: p.type,
+        price: p.price
+    }));
+
+    const { error: priceError } = await supabase
+        .from('product_prices')
+        .insert(priceInserts);
+
+    if (priceError) {
+        console.error('Price Update Error:', priceError);
+        return { message: 'Produk diupdate tapi harga gagal.', success: false };
+    }
+
+    revalidatePath('/dashboard/products');
+    return { message: 'Produk berhasil diupdate!', success: true };
+}
+
 export async function deleteProduct(id: string) {
     const supabase = await createClient();
     const { error } = await supabase.from('products').delete().match({ id });

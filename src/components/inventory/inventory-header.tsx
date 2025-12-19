@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { PackagePlus, Search, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GoodsReceiptForm from './goods-receipt-form';
+import InventoryActions from './inventory-actions';
 
-export default function InventoryHeader({ products }: { products: any[] }) {
+export default function InventoryHeader({ products, inventory }: { products: any[], inventory?: any[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -27,6 +28,9 @@ export default function InventoryHeader({ products }: { products: any[] }) {
                 </div>
 
                 <div className="flex gap-2 w-full sm:w-auto">
+                    {/* Add Actions here */}
+                    {inventory && <InventoryActions inventory={inventory} />}
+
                     <div className="relative flex-1 sm:w-64">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                         <input

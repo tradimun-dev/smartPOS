@@ -1,8 +1,8 @@
 'use client';
 
 import { submitGoodsReceipt } from '@/actions/inventory';
-// @ts-ignore
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useEffect } from 'react';
 import { PackagePlus } from 'lucide-react';
 
@@ -18,7 +18,7 @@ export default function GoodsReceiptForm({
     products: any[],
     onSuccess: () => void
 }) {
-    const [state, formAction] = useFormState(submitGoodsReceipt, initialState);
+    const [state, formAction] = useActionState(submitGoodsReceipt, initialState);
 
     useEffect(() => {
         if (state.success) onSuccess();

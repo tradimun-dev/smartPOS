@@ -61,8 +61,8 @@ BEGIN
     v_qty_needed := (v_item->>'quantity')::INTEGER;
     v_price := (v_item->>'price')::DECIMAL;
 
-    INSERT INTO public.sales_order_lines (
-      sales_order_id, product_id, quantity, unit_price, total_price
+    INSERT INTO public.order_lines (
+      order_id, product_id, quantity, unit_price, subtotal
     ) VALUES (
       v_order_id, v_product_id, v_qty_needed, v_price, v_qty_needed * v_price
     );

@@ -1,8 +1,8 @@
 'use client';
 
 import { createCustomer } from '@/actions/customers';
-// @ts-ignore
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { useEffect } from 'react';
 import { Save } from 'lucide-react';
 
@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export default function AddCustomerForm({ onSuccess }: { onSuccess: () => void }) {
-    const [state, formAction] = useFormState(createCustomer, initialState);
+    const [state, formAction] = useActionState(createCustomer, initialState);
 
     useEffect(() => {
         if (state.success) onSuccess();

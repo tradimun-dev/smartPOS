@@ -10,6 +10,17 @@ export async function submitGoodsReceipt(prevState: any, formData: FormData) {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return { message: 'Unauthorized', success: false };
 
+    // Ensure user exists in public.users (Self-healing for dev environment)
+    const { data: publicUser } = await supabase.from('users').select('id').eq('id', user.id).single();
+    if (!publicUser) {
+        await supabase.from('users').insert({
+            id: user.id,
+            email: user.email,
+            name: user.user_metadata?.name || user.email?.split('@')[0] || 'User',
+            role: 'owner'
+        });
+    }
+
     const rawData = {
         p_product_id: formData.get('product_id') as string,
         p_batch_number: formData.get('batch_number') as string,
